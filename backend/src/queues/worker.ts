@@ -3,19 +3,31 @@ dotenv.config()
 
 import { Worker } from 'bullmq'
 import mongoose from 'mongoose'
-import { connection } from './queue'
 import Assignment from '../models/Assignment'
 import Result from '../models/Result'
 import { buildPrompt } from '../services/promptBuilder'
 import { generateQuestionPaper } from '../services/llm'
 
+// Same helper as queue.ts — no ioredis import needed
+const getRedisConnection = () => {
+  const url = new URL(process.env.REDIS_URL || 'redis://localhost:6379')
+  return {
+    host: url.hostname,
+    port: Number(url.port),
+    password: url.password || undefined,
+    tls: url.protocol === 'rediss:' ? {} : undefined,
+    maxRetriesPerRequest: null as null,
+  }
+}
+
+// MongoDB
 mongoose.connect(process.env.MONGODB_URI!)
   .then(() => console.log('✅ Worker: MongoDB connected'))
   .catch(err => console.error('❌ Worker: MongoDB error:', err))
 
 async function notifyFrontend(assignmentId: string, event: string, data: any) {
   try {
-    const response = await fetch(`http://localhost:${process.env.PORT || 5000}/api/assignments/${assignmentId}/notify`, {
+    await fetch(`http://localhost:${process.env.PORT || 5000}/api/assignments/${assignmentId}/notify`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-internal-key': 'worker-secret' },
       body: JSON.stringify({ event, data })
@@ -76,7 +88,11 @@ const worker = new Worker('assignment-generation', async (job) => {
     await notifyFrontend(assignmentId, 'generation:failed', { status: 'failed', error: err.message })
     throw err
   }
-}, { connection, concurrency: 2 })
+
+}, {
+  connection: getRedisConnection(),
+  concurrency: 2
+})
 
 worker.on('completed', (job) => console.log(`✅ Worker completed job ${job.id}`))
 worker.on('failed', (job, err) => console.error(`❌ Worker failed job ${job?.id}:`, err.message))

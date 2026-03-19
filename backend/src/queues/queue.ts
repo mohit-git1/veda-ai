@@ -1,21 +1,27 @@
-import { Queue } from 'bullmq'
-import IORedis from 'ioredis'
+import { Queue, QueueOptions } from 'bullmq'
 
 const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379'
 
-export const connection = new IORedis(redisUrl, {
-  maxRetriesPerRequest: null,
-  tls: redisUrl.startsWith('rediss://') ? {} : undefined
-})
+// Parse the URL manually for BullMQ
+const getRedisConnection = () => {
+  const url = new URL(redisUrl)
+  return {
+    host: url.hostname,
+    port: Number(url.port),
+    password: url.password || undefined,
+    tls: url.protocol === 'rediss:' ? {} : undefined,
+    maxRetriesPerRequest: null,
+  }
+}
 
 export const assignmentQueue = new Queue('assignment-generation', {
-  connection,
+  connection: getRedisConnection(),
   defaultJobOptions: {
     attempts: 3,
     backoff: { type: 'exponential', delay: 2000 },
     removeOnComplete: 50,
-    removeOnFail: 20
-  }
+    removeOnFail: 20,
+  },
 })
 
 console.log('📦 BullMQ queue initialized')
