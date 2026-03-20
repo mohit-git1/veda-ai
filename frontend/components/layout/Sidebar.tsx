@@ -3,7 +3,12 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAssignmentStore } from '@/store/assignmentStore'
 
-export default function Sidebar() {
+interface SidebarProps {
+  mobileOpen?: boolean
+  onMobileClose?: () => void
+}
+
+export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const { assignments } = useAssignmentStore()
@@ -59,41 +64,40 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-[240px] min-h-screen bg-white border-r border-gray-100 fixed left-0 top-0 z-30">
-
+      {/* Desktop + Mobile Sidebar */}
+      <aside
+        className={`flex flex-col w-[240px] min-h-screen bg-white border-r border-gray-100 fixed left-0 top-0 z-30 transition-transform duration-300 ${
+          mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }`}
+      >
         {/* Logo */}
         <div className="px-5 pt-8 pb-6">
           <div className="flex items-center gap-3">
-            <div
-              className="w-[42px] h-[42px] rounded-[13px] flex items-center justify-center flex-shrink-0 shadow-[0_8px_16px_rgba(0,0,0,0.2)]"
-              style={{ background: 'linear-gradient(to top right, #1a0b0b 0%, #b82525 45%, #ffa040 100%)' }}
-            >
-              <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
-                {/* Left arm (shaded fold) */}
-                <path d="M4 8 h8 l7 17 h-6 L4 8 z" fill="#E2E8F0" />
-                {/* Right arm (top white overlap) */}
-                <path d="M28 8 h-8 l-7 17 h6 l7-17 z" fill="#FFFFFF" style={{ filter: 'drop-shadow( -2px 0px 1px rgba(0,0,0,0.15) )' }} />
-              </svg>
-            </div>
-            <span className="font-extrabold text-[24px] tracking-tight text-gray-900 leading-none" style={{ letterSpacing: '-0.03em' }}>VedaAI</span>
+            <img
+              src="/VedaAI.png"
+              alt="VedaAI"
+              width={42}
+              height={42}
+              style={{ borderRadius: '22%' }}
+            />
+            <span className="font-extrabold text-[18px] tracking-tight text-gray-900">VedaAI</span>
           </div>
         </div>
 
         {/* Create Assignment Button */}
         <div className="px-4 mb-6">
           <button
-            onClick={() => router.push('/assignments/create')}
-            className="relative w-full h-[40px] rounded-full shadow-[0_4px_12px_rgba(232,67,28,0.25)] transition-all hover:shadow-[0_6px_16px_rgba(232,67,28,0.35)] active:scale-95 group"
+            onClick={() => {
+              router.push('/assignments/create')
+              onMobileClose?.()
+            }}
+            className="relative w-full h-[40px] rounded-full transition-all hover:opacity-90 active:scale-95 group"
           >
-            {/* Outline Gradient */}
             <div className="absolute inset-0 rounded-full p-[1.5px] bg-gradient-to-r from-[#FFA06A] via-[#E8431C] to-[#B01E1E]">
-              {/* Inner Fill */}
-              <div className="w-full h-full rounded-full bg-[#2A2B2A] transition-colors group-hover:bg-[#333433]"></div>
+              <div className="w-full h-full rounded-full bg-[#111111] transition-colors group-hover:bg-[#222222]"></div>
             </div>
-            {/* Content Array */}
-            <div className="absolute inset-0 flex items-center justify-center gap-[6px] text-white text-[15px] font-medium tracking-wide">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <div className="absolute inset-0 flex items-center justify-center gap-[6px] text-white text-[14px] font-medium">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
                 <path d="M10 1C10 7.5 11.5 9 17 9C11.5 9 10 10.5 10 17C10 10.5 8.5 9 3 9C8.5 9 10 7.5 10 1Z" />
                 <path d="M18.5 2C18.5 4.5 19.5 5 22 5C19.5 5 18.5 5.5 18.5 8C18.5 5.5 17.5 5 15 5C17.5 5 18.5 4.5 18.5 2Z" />
               </svg>
@@ -107,14 +111,20 @@ export default function Sidebar() {
           {navItems.map((item) => {
             const isActive =
               pathname === item.href ||
-              (item.href === '/assignments' && pathname.startsWith('/assignments') && !pathname.startsWith('/assignments/create'))
-            const isToolkit = item.href === '/toolkit' && pathname.startsWith('/assignments/') && pathname !== '/assignments/create'
+              (item.href === '/assignments' &&
+                pathname.startsWith('/assignments') &&
+                !pathname.startsWith('/assignments/create'))
+            const isToolkit =
+              item.href === '/toolkit' &&
+              pathname.startsWith('/assignments/') &&
+              pathname !== '/assignments/create'
             const active = isActive || isToolkit
 
             return (
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={onMobileClose}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
                   active
                     ? 'bg-gray-100 text-gray-900 font-semibold'
@@ -142,6 +152,7 @@ export default function Sidebar() {
         <div className="px-3 pb-5 mt-auto space-y-1">
           <Link
             href="/settings"
+            onClick={onMobileClose}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
               pathname === '/settings'
                 ? 'bg-gray-100 text-gray-900 font-semibold'
@@ -171,8 +182,10 @@ export default function Sidebar() {
       </aside>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around px-2 py-3"
-        style={{ background: '#111111' }}>
+      <nav
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around px-2 py-3"
+        style={{ background: '#111111' }}
+      >
         {[
           { label: 'Home', href: '/', icon: navItems[0].icon },
           { label: 'My Groups', href: '/groups', icon: navItems[1].icon },
@@ -181,9 +194,15 @@ export default function Sidebar() {
         ].map((item) => {
           const active = pathname === item.href
           return (
-            <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 px-4 py-1">
+            <Link
+              key={item.href}
+              href={item.href}
+              className="flex flex-col items-center gap-1 px-4 py-1"
+            >
               <span style={{ color: active ? '#E8431C' : '#9CA3AF' }}>{item.icon}</span>
-              <span className="text-[10px]" style={{ color: active ? '#E8431C' : '#6B7280' }}>{item.label}</span>
+              <span className="text-[10px]" style={{ color: active ? '#E8431C' : '#6B7280' }}>
+                {item.label}
+              </span>
             </Link>
           )
         })}
