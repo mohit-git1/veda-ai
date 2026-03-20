@@ -7,13 +7,19 @@ import { assignmentsApi, Assignment, Result } from '@/lib/api'
 import { useWebSocket } from '@/hooks/useWebSocket'
 
 const DifficultyBadge = ({ difficulty }: { difficulty: string }) => {
-  const map: Record<string, string> = {
-    easy: 'bg-green-100 text-green-700',
-    medium: 'bg-orange-100 text-orange-700',
-    hard: 'bg-red-100 text-red-700',
+  const d = difficulty.toLowerCase()
+  let colorClass = 'bg-[#F3F4F6] text-[#6B7280]' // default
+
+  if (d.includes('easy')) {
+    colorClass = 'bg-[#DCFCE7] text-[#15803D]'
+  } else if (d.includes('medium') || d.includes('moderate')) {
+    colorClass = 'bg-[#FEF3C7] text-[#D97706]'
+  } else if (d.includes('hard') || d.includes('challenge') || d.includes('challenging')) {
+    colorClass = 'bg-[#FEE2E2] text-[#DC2626]'
   }
+
   return (
-    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wide ${map[difficulty] || 'bg-gray-100 text-gray-600'}`}>
+    <span className={`text-[10px] font-semibold px-[8px] py-[2px] rounded-full uppercase tracking-wide ${colorClass}`}>
       {difficulty}
     </span>
   )
@@ -85,51 +91,50 @@ export default function AssignmentOutputPage() {
     return (
       <AppShell showBack title="Create New">
         <div className="flex items-center justify-center h-64">
-          <div className="w-8 h-8 border-2 border-gray-200 border-t-gray-800 rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#E5E7EB] border-t-[#111111] rounded-full animate-spin" />
         </div>
       </AppShell>
     )
   }
 
   return (
-    <AppShell showBack title="Create New">
-      <div className="max-w-3xl mx-auto">
+    <AppShell showBack title="Create New" mobileTitle="Assignments">
+      <div className="max-w-[720px] mx-auto pb-[80px]">
 
         {/* AI Message Bubble */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-5 flex items-start gap-4">
-          <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #E8431C, #FF6B35)' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+        <div className="bg-white rounded-[16px] border border-[#F0F0F0] p-[20px] mb-[24px] flex flex-col sm:flex-row items-start gap-[16px]">
+          <div className="w-[36px] h-[36px] rounded-full flex flex-shrink-0 items-center justify-center" style={{ background: 'linear-gradient(135deg, #E8431C, #FF6B35)' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
             </svg>
           </div>
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center justify-between gap-[16px] w-full">
             {isGenerating ? (
-              <div className="flex items-center gap-3">
-                <div className="flex gap-1">
+              <div className="flex items-center gap-[12px]">
+                <div className="flex gap-1.5">
                   {[0, 1, 2].map((i) => (
-                    <div key={i} className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                    <div key={i} className="w-[6px] h-[6px] bg-[#9CA3AF] rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
                   ))}
                 </div>
-                <p className="text-sm text-gray-500">Generating your question paper, please wait...</p>
+                <p className="text-[14px] text-[#374151]">Generating your question paper, please wait...</p>
               </div>
             ) : currentResult ? (
               <>
-                <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                  Certainly, Lakshya! Here are customized Question Paper for your <strong>{currentAssignment?.subject || 'CBSE'}</strong> classes on the NCERT chapters:
+                <p className="text-[14px] text-[#374151] leading-[1.6]">
+                  Certainly! Here is a customized Question Paper for your <strong>{currentAssignment?.subject || 'CBSE'}</strong> class.
                 </p>
                 <button
                   onClick={handleDownloadPDF}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
-                  style={{ background: '#16a34a' }}
+                  className="flex items-center gap-[8px] h-[36px] px-[16px] rounded-lg text-[13px] font-medium text-white transition-colors bg-[#16A34A] hover:bg-[#15803d]"
                 >
-                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                   </svg>
                   Download as PDF
                 </button>
               </>
             ) : (
-              <p className="text-sm text-gray-500">
+              <p className="text-[14px] text-[#6B7280]">
                 {currentAssignment?.status === 'failed'
                   ? 'Generation failed. Please try regenerating.'
                   : 'Starting generation...'}
@@ -140,48 +145,59 @@ export default function AssignmentOutputPage() {
 
         {/* Question Paper */}
         {currentResult && (
-          <div ref={paperRef} className="bg-white rounded-2xl border border-gray-100 p-8 print:shadow-none print:rounded-none">
+          <div ref={paperRef} className="bg-white rounded-[16px] border border-[#F0F0F0] p-[16px] md:p-[32px] md:px-[40px] print:shadow-none print:border-none print:rounded-none">
             {/* School Header */}
-            <div className="text-center mb-6 pb-4 border-b border-gray-200">
-              <h1 className="text-[17px] font-bold text-gray-900">{currentResult.schoolName}</h1>
-              <p className="text-sm text-gray-700 mt-1">Subject: {currentResult.subject}</p>
-              <p className="text-sm text-gray-700">Class: {currentResult.className}</p>
+            <div className="text-center mb-[16px] pb-[16px] border-b border-[#E5E7EB]">
+              <h1 className="text-[15px] md:text-[17px] font-bold text-[#111111]">{currentResult.schoolName}</h1>
+              <p className="text-[14px] text-[#374151] mt-1">Subject: {currentResult.subject}</p>
+              <p className="text-[14px] text-[#374151]">Class: {currentResult.className}</p>
             </div>
 
             {/* Meta row */}
-            <div className="flex justify-between text-sm text-gray-700 mb-4">
+            <div className="flex justify-between items-center text-[13px] text-[#374151] mb-[16px]">
               <span>Time Allowed: {currentResult.timeAllowed}</span>
               <span>Maximum Marks: {currentResult.maximumMarks}</span>
             </div>
 
-            <p className="text-xs text-gray-500 italic mb-6">All questions are compulsory unless stated otherwise.</p>
+            <p className="text-[12px] text-[#6B7280] italic mb-[24px]">All questions are compulsory unless stated otherwise.</p>
 
             {/* Student Info */}
-            <div className="mb-6 space-y-2">
-              {['Name', 'Roll Number', 'Class & Section'].map((label) => (
-                <div key={label} className="flex items-center gap-2 text-sm text-gray-700">
-                  <span className="w-32 flex-shrink-0">{label}:</span>
-                  <div className="flex-1 border-b border-gray-400 min-h-[20px]" />
-                </div>
-              ))}
+            <div className="mb-[24px] space-y-[12px]">
+              <div className="flex items-end gap-[8px] text-[13px] text-[#374151]">
+                <span className="flex-shrink-0 leading-none">Name:</span>
+                <div className="flex-1 border-b border-[#9CA3AF]" />
+              </div>
+              <div className="flex items-end gap-[8px] text-[13px] text-[#374151]">
+                <span className="flex-shrink-0 leading-none">Roll Number:</span>
+                <div className="flex-1 border-b border-[#9CA3AF]" />
+              </div>
+              <div className="flex items-end gap-[8px] text-[13px] text-[#374151]">
+                <span className="flex-shrink-0 leading-none">Class: {currentResult.className} Section:</span>
+                <div className="flex-1 border-b border-[#9CA3AF]" />
+              </div>
             </div>
 
             {/* Sections */}
             {currentResult.sections.map((section) => (
-              <div key={section.id} className="mb-8">
-                <h2 className="text-center font-bold text-gray-900 text-base mb-1">{section.title}</h2>
-                <p className="text-center text-xs text-gray-500 italic mb-5">{section.instruction}</p>
+              <div key={section.id} className="mb-[32px]">
+                <h2 className="text-center font-bold text-[#111111] text-[15px] mt-[24px] mb-[4px]">{section.title}</h2>
+                <div className="text-center mb-[16px]">
+                  <span className="text-[12px] text-[#6B7280] italic">
+                    <span className="font-bold">{section.instruction.split('—')[0] || ''}</span>
+                    {section.instruction.includes('—') ? ' — ' + section.instruction.split('—').slice(1).join('—') : section.instruction}
+                  </span>
+                </div>
 
-                <div className="space-y-4">
+                <div className="flex flex-col gap-[12px]">
                   {section.questions.map((q, qi) => (
-                    <div key={q.id} className="flex gap-3">
-                      <span className="text-sm font-medium text-gray-700 flex-shrink-0 w-7">{qi + 1}.</span>
+                    <div key={q.id} className="flex gap-[8px]">
+                      <span className="text-[13px] font-medium text-[#374151] flex-shrink-0 w-[24px]">{qi + 1}.</span>
                       <div className="flex-1">
-                        <div className="flex items-start justify-between gap-3">
-                          <p className="text-sm text-gray-800 leading-relaxed flex-1">{q.text}</p>
-                          <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-[8px]">
+                          <p className="text-[13px] text-[#374151] leading-[1.6] flex-1 whitespace-pre-wrap">{q.text}</p>
+                          <div className="flex items-center gap-[8px] flex-shrink-0">
                             <DifficultyBadge difficulty={q.difficulty} />
-                            <span className="text-xs text-gray-500 whitespace-nowrap">[{q.marks} Mark{q.marks !== 1 ? 's' : ''}]</span>
+                            <span className="text-[11px] text-[#6B7280] whitespace-nowrap">[{q.marks} Marks]</span>
                           </div>
                         </div>
                       </div>
@@ -191,22 +207,24 @@ export default function AssignmentOutputPage() {
               </div>
             ))}
 
-            <p className="text-center text-sm font-semibold text-gray-700 mt-8 pt-4 border-t border-gray-200">
-              — End of Question Paper —
-            </p>
+            <div className="mt-[32px] pt-[16px] border-t border-[#E5E7EB]">
+              <p className="text-center text-[13px] font-semibold text-[#111111]">
+                End of Question Paper
+              </p>
+            </div>
 
             {/* Answer Key */}
             {currentResult.sections.some((s) => s.questions.some((q) => q.answer)) && (
-              <div className="mt-8 pt-6 border-t border-gray-200">
-                <h2 className="text-base font-bold text-gray-900 mb-4">Answer Key</h2>
+              <div className="mt-[32px] pt-[24px] border-t border-[#E5E7EB]">
+                <h2 className="text-[14px] font-bold text-[#111111] mb-[16px]">Answer Key</h2>
                 {currentResult.sections.map((section) => (
-                  <div key={section.id} className="mb-4">
-                    <h3 className="text-sm font-semibold text-gray-700 mb-2">{section.title}</h3>
-                    <div className="space-y-2">
+                  <div key={section.id} className="mb-[24px]">
+                    <h3 className="text-[13px] font-semibold text-[#111111] mb-[8px]">{section.title}</h3>
+                    <div className="flex flex-col gap-[12px]">
                       {section.questions.filter((q) => q.answer).map((q, qi) => (
-                        <div key={q.id} className="flex gap-3 text-sm">
-                          <span className="text-gray-500 flex-shrink-0">{qi + 1}.</span>
-                          <p className="text-gray-700 leading-relaxed">{q.answer}</p>
+                        <div key={q.id} className="flex gap-[8px]">
+                          <span className="text-[13px] font-medium text-[#374151] flex-shrink-0 w-[24px]">{qi + 1}.</span>
+                          <p className="text-[13px] text-[#374151] leading-[1.7] flex-1 whitespace-pre-wrap">{q.answer}</p>
                         </div>
                       ))}
                     </div>
@@ -219,39 +237,40 @@ export default function AssignmentOutputPage() {
 
         {/* Generating skeleton */}
         {isGenerating && !currentResult && (
-          <div className="bg-white rounded-2xl border border-gray-100 p-8 animate-pulse">
-            <div className="h-5 bg-gray-100 rounded w-64 mx-auto mb-2" />
-            <div className="h-4 bg-gray-100 rounded w-40 mx-auto mb-6" />
-            <div className="space-y-3">
+          <div className="bg-white rounded-[16px] border border-[#F0F0F0] p-[32px] animate-pulse">
+            <div className="h-5 bg-[#F3F4F6] rounded w-64 mx-auto mb-2" />
+            <div className="h-4 bg-[#F3F4F6] rounded w-40 mx-auto mb-6" />
+            <div className="space-y-[12px]">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-3 bg-gray-100 rounded" style={{ width: `${85 - i * 5}%` }} />
+                <div key={i} className="h-3 bg-[#F3F4F6] rounded" style={{ width: `${85 - i * 5}%` }} />
               ))}
             </div>
           </div>
         )}
 
-        {/* Action bar */}
-        {currentResult && (
-          <div className="flex justify-end mt-4">
-            <button
-              onClick={handleRegenerate}
-              disabled={regenerating}
-              className="flex items-center gap-2 px-5 py-2.5 border border-gray-200 bg-white rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-60"
-            >
-              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-              </svg>
-              {regenerating ? 'Regenerating...' : 'Regenerate'}
-            </button>
-          </div>
-        )}
       </div>
+
+      {/* Floating Regenerate Action Bar */}
+      {currentResult && (
+        <div className="fixed bottom-[80px] md:bottom-8 right-6 md:right-12 z-20">
+          <button
+            onClick={handleRegenerate}
+            disabled={regenerating}
+            className="flex items-center justify-center gap-[6px] px-[20px] h-[36px] bg-white border border-[#E5E7EB] rounded-full text-[13px] font-medium text-[#374151] shadow-lg hover:bg-[#F9FAFB] transition-colors disabled:opacity-60"
+          >
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            {regenerating ? 'Regenerating...' : 'Regenerate'}
+          </button>
+        </div>
+      )}
 
       <style jsx global>{`
         @media print {
           body * { visibility: hidden; }
           .print\\:shadow-none, .print\\:shadow-none * { visibility: visible; }
-          .print\\:shadow-none { position: absolute; left: 0; top: 0; width: 100%; }
+          .print\\:shadow-none { position: absolute; left: 0; top: 0; width: 100%; padding: 0 !important; margin: 0 !important; }
         }
       `}</style>
     </AppShell>

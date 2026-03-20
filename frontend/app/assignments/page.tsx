@@ -41,7 +41,7 @@ export default function AssignmentsPage() {
   const StatusBadge = ({ status }: { status: Assignment['status'] }) => {
     const map = {
       pending: { label: 'Pending', color: 'bg-yellow-100 text-yellow-700' },
-      processing: { label: 'Generating...', color: 'bg-blue-100 text-blue-700' },
+      processing: { label: 'Generating...', color: 'bg-blue-100 text-blue-700 animate-pulse' },
       completed: { label: 'Ready', color: 'bg-green-100 text-green-700' },
       failed: { label: 'Failed', color: 'bg-red-100 text-red-700' },
     }
@@ -150,7 +150,7 @@ export default function AssignmentsPage() {
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px]">
             {filtered.map((assignment) => (
-              <div key={assignment._id} className="bg-white rounded-[16px] border border-[#F0F0F0] p-[20px] relative hover:shadow-sm transition-shadow">
+              <div key={assignment._id} className="bg-white rounded-[16px] border border-[#F0F0F0] p-[20px] relative hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1 min-w-0 pr-3">
                     <h3 className="font-semibold text-[#111111] text-[15px] truncate mb-1.5">{assignment.title}</h3>
@@ -166,7 +166,7 @@ export default function AssignmentsPage() {
                       </svg>
                     </button>
                     {openMenu === assignment._id && (
-                      <div className="absolute right-0 top-8 bg-white border border-[#F0F0F0] rounded-[12px] shadow-md z-10 py-1.5 w-44">
+                      <div className="absolute right-0 top-8 bg-white border border-[#F0F0F0] rounded-[12px] shadow-md z-50 py-1.5 w-44">
                         <button
                           onClick={() => { router.push(`/assignments/${assignment._id}`); setOpenMenu(null) }}
                           className="w-full text-left px-4 py-2 text-[14px] text-[#374151] hover:bg-[#F9FAFB]"
@@ -226,7 +226,7 @@ export default function AssignmentsPage() {
 
       {/* Close menu on outside click */}
       {openMenu && (
-        <div className="fixed inset-0 z-0" onClick={() => setOpenMenu(null)} />
+        <div className="fixed inset-0 z-40" onClick={() => setOpenMenu(null)} />
       )}
     </AppShell>
   )

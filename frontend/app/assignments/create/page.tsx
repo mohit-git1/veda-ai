@@ -76,7 +76,9 @@ export default function CreateAssignmentPage() {
   const validate = () => {
     const e: Record<string, string> = {}
     if (!title.trim()) e.title = 'Title is required'
+    if (!subject.trim()) e.subject = 'Subject is required'
     if (!dueDate) e.dueDate = 'Due date is required'
+    if (!additionalInstructions.trim()) e.additionalInstructions = 'Instructions are required'
     if (questionTypes.length === 0) e.questionTypes = 'Add at least one question type'
     questionTypes.forEach((q, i) => {
       if (q.numQuestions < 1) e[`q_${i}_num`] = 'Min 1'
@@ -155,8 +157,9 @@ export default function CreateAssignmentPage() {
               placeholder="e.g. Science, Mathematics"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              className="w-full px-[16px] py-[10px] border border-[#E5E7EB] rounded-lg text-sm text-[#111111] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D1D5DB] transition-colors"
+              className={`w-full px-[16px] py-[10px] border rounded-lg text-sm text-[#111111] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D1D5DB] transition-colors ${errors.subject ? 'border-red-300' : 'border-[#E5E7EB]'}`}
             />
+            {errors.subject && <p className="text-[12px] text-red-500 mt-1">{errors.subject}</p>}
           </div>
 
           {/* Section heading */}
@@ -275,14 +278,18 @@ export default function CreateAssignmentPage() {
                       <span className="md:hidden text-[12px] font-medium text-[#6B7280] mr-2">Questions:</span>
                       <button
                         onClick={() => updateRow(row.id, 'numQuestions', Math.max(1, row.numQuestions - 1))}
-                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors focus:outline-none"
                       >−</button>
-                      <div className="w-[28px] h-[28px] flex items-center justify-center text-[13px] font-medium text-[#111111] border border-[#E5E7EB] rounded-lg">
-                        {row.numQuestions}
-                      </div>
+                      <input
+                        type="number"
+                        min="1"
+                        value={row.numQuestions}
+                        onChange={(e) => updateRow(row.id, 'numQuestions', parseInt(e.target.value) || 0)}
+                        className="w-[28px] h-[28px] flex text-center items-center justify-center text-[13px] font-medium text-[#111111] border border-[#E5E7EB] rounded-lg focus:outline-none focus:border-[#D1D5DB] hide-number-spinners"
+                      />
                       <button
                         onClick={() => updateRow(row.id, 'numQuestions', row.numQuestions + 1)}
-                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors focus:outline-none"
                       >+</button>
                     </div>
 
@@ -291,14 +298,18 @@ export default function CreateAssignmentPage() {
                       <span className="md:hidden text-[12px] font-medium text-[#6B7280] mr-2">Marks:</span>
                       <button
                         onClick={() => updateRow(row.id, 'marks', Math.max(1, row.marks - 1))}
-                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors focus:outline-none"
                       >−</button>
-                      <div className="w-[28px] h-[28px] flex items-center justify-center text-[13px] font-medium text-[#111111] border border-[#E5E7EB] rounded-lg">
-                        {row.marks}
-                      </div>
+                      <input
+                        type="number"
+                        min="1"
+                        value={row.marks}
+                        onChange={(e) => updateRow(row.id, 'marks', parseInt(e.target.value) || 0)}
+                        className="w-[28px] h-[28px] flex text-center items-center justify-center text-[13px] font-medium text-[#111111] border border-[#E5E7EB] rounded-lg focus:outline-none focus:border-[#D1D5DB] hide-number-spinners"
+                      />
                       <button
                         onClick={() => updateRow(row.id, 'marks', row.marks + 1)}
-                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors focus:outline-none"
                       >+</button>
                     </div>
                   </div>
@@ -336,7 +347,7 @@ export default function CreateAssignmentPage() {
                 value={additionalInstructions}
                 onChange={(e) => setAdditionalInstructions(e.target.value)}
                 rows={3}
-                className="w-full px-[16px] py-[12px] border border-[#E5E7EB] rounded-xl text-[14px] text-[#111111] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D1D5DB] resize-none pb-8"
+                className={`w-full px-[16px] py-[12px] border rounded-xl text-[14px] text-[#111111] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D1D5DB] resize-none pb-8 ${errors.additionalInstructions ? 'border-red-300' : 'border-[#E5E7EB]'}`}
               />
               <button className="absolute right-[12px] bottom-[12px] text-[#9CA3AF] hover:text-[#374151] transition-colors p-1">
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -344,6 +355,7 @@ export default function CreateAssignmentPage() {
                 </svg>
               </button>
             </div>
+            {errors.additionalInstructions && <p className="text-[12px] text-red-500 mt-1">{errors.additionalInstructions}</p>}
           </div>
 
           {errors.submit && (
