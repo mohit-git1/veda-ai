@@ -20,34 +20,44 @@ interface AssignmentStore {
   setError: (e: string | null) => void
 }
 
-export const useAssignmentStore = create<AssignmentStore>((set) => ({
-  assignments: [],
-  currentAssignment: null,
-  currentResult: null,
-  isLoading: false,
-  isGenerating: false,
-  error: null,
+import { persist } from 'zustand/middleware'
 
-  setAssignments: (assignments) => set({ assignments }),
-  addAssignment: (assignment) =>
-    set((state) => ({ assignments: [assignment, ...state.assignments] })),
-  updateAssignmentStatus: (id, status) =>
-    set((state) => ({
-      assignments: state.assignments.map((a) =>
-        a._id === id ? { ...a, status } : a
-      ),
-      currentAssignment:
-        state.currentAssignment?._id === id
-          ? { ...state.currentAssignment, status }
-          : state.currentAssignment,
-    })),
-  removeAssignment: (id) =>
-    set((state) => ({
-      assignments: state.assignments.filter((a) => a._id !== id),
-    })),
-  setCurrentAssignment: (currentAssignment) => set({ currentAssignment }),
-  setCurrentResult: (currentResult) => set({ currentResult }),
-  setLoading: (isLoading) => set({ isLoading }),
-  setGenerating: (isGenerating) => set({ isGenerating }),
-  setError: (error) => set({ error }),
-}))
+export const useAssignmentStore = create<AssignmentStore>()(
+  persist(
+    (set) => ({
+      assignments: [],
+      currentAssignment: null,
+      currentResult: null,
+      isLoading: false,
+      isGenerating: false,
+      error: null,
+
+      setAssignments: (assignments) => set({ assignments }),
+      addAssignment: (assignment) =>
+        set((state) => ({ assignments: [assignment, ...state.assignments] })),
+      updateAssignmentStatus: (id, status) =>
+        set((state) => ({
+          assignments: state.assignments.map((a) =>
+            a._id === id ? { ...a, status } : a
+          ),
+          currentAssignment:
+            state.currentAssignment?._id === id
+              ? { ...state.currentAssignment, status }
+              : state.currentAssignment,
+        })),
+      removeAssignment: (id) =>
+        set((state) => ({
+          assignments: state.assignments.filter((a) => a._id !== id),
+        })),
+      setCurrentAssignment: (currentAssignment) => set({ currentAssignment }),
+      setCurrentResult: (currentResult) => set({ currentResult }),
+      setLoading: (isLoading) => set({ isLoading }),
+      setGenerating: (isGenerating) => set({ isGenerating }),
+      setError: (error) => set({ error }),
+    }),
+    {
+      name: 'veda-assignment-store',
+      partialize: (state) => ({ assignments: state.assignments }),
+    }
+  )
+)
