@@ -112,29 +112,29 @@ export default function CreateAssignmentPage() {
 
   return (
     <AppShell showBack title="Assignment">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-[720px] mx-auto pb-24 md:pb-12">
         {/* Page header */}
         <div className="mb-6">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            <h1 className="text-lg font-semibold text-gray-900">Create Assignment</h1>
+          <div className="flex items-center gap-[8px] mb-[2px]">
+            <div className="w-[8px] h-[8px] rounded-full bg-[#22C55E]"></div>
+            <h1 className="text-[18px] font-semibold text-[#111111]">Create Assignment</h1>
           </div>
-          <p className="text-sm text-gray-500 ml-4">Set up a new assignment for your students</p>
+          <p className="text-[13px] text-[#6B7280] ml-[16px]">Set up a new assignment for your students</p>
         </div>
 
         {/* Stepper */}
-        <div className="mb-8">
-          <div className="w-full h-1 bg-gray-200 rounded-full">
-            <div className="h-1 rounded-full" style={{ background: '#111111', width: '50%' }} />
+        <div className="mb-[32px]">
+          <div className="w-full h-[4px] bg-[#E5E7EB] rounded-full">
+            <div className="h-[4px] bg-[#111111] rounded-full" style={{ width: '50%' }} />
           </div>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8">
+        <div className="bg-white rounded-[20px] border border-[#F0F0F0] p-[24px] md:p-[32px]">
 
           {/* Title */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-900 mb-1.5">
+            <label className="block text-[13px] font-medium text-[#111111] mb-1.5">
               Assignment Title <span className="text-red-500">*</span>
             </label>
             <input
@@ -142,61 +142,62 @@ export default function CreateAssignmentPage() {
               placeholder="e.g. Quiz on Electricity"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`w-full px-4 py-2.5 border rounded-lg text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 ${errors.title ? 'border-red-300' : 'border-gray-200'}`}
+              className={`w-full px-[16px] py-[10px] border rounded-lg text-sm text-[#111111] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D1D5DB] transition-colors ${errors.title ? 'border-red-300' : 'border-[#E5E7EB]'}`}
             />
             {errors.title && <p className="text-xs text-red-500 mt-1">{errors.title}</p>}
           </div>
 
           {/* Subject */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-900 mb-1.5">Subject</label>
+            <label className="block text-[13px] font-medium text-[#111111] mb-1.5">Subject</label>
             <input
               type="text"
               placeholder="e.g. Science, Mathematics"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400"
+              className="w-full px-[16px] py-[10px] border border-[#E5E7EB] rounded-lg text-sm text-[#111111] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D1D5DB] transition-colors"
             />
           </div>
 
           {/* Section heading */}
           <div className="mb-5">
-            <h2 className="text-base font-semibold text-gray-900">Assignment Details</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Basic information about your assignment</p>
+            <h2 className="text-[15px] font-semibold text-[#111111]">Assignment Details</h2>
+            <p className="text-[12px] text-[#9CA3AF] mt-0.5">Basic information about your assignment</p>
           </div>
 
-          {/* File Upload */}
+          {/* File Upload Dropzone */}
           <div
             {...getRootProps()}
-            className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors mb-2 ${
-              isDragActive ? 'border-gray-400 bg-gray-50' : 'border-gray-200 hover:border-gray-300'
-            } ${file ? 'bg-green-50 border-green-300' : ''}`}
+            className={`border-2 border-dashed rounded-[12px] p-[32px] text-center cursor-pointer transition-colors mb-3 ${
+              isDragActive ? 'border-[#9CA3AF] bg-[#F9FAFB]' : 
+              file ? 'border-[#22C55E] bg-[#F0FDF4]' : 'border-[#E5E7EB] hover:border-[#D1D5DB]'
+            }`}
           >
             <input {...getInputProps()} />
             {file ? (
-              <div>
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <svg width="20" height="20" fill="none" stroke="#22c55e" strokeWidth="2" viewBox="0 0 24 24">
+              <div className="flex flex-col items-center">
+                <div className="w-10 h-10 bg-[#DCFCE7] rounded-full flex items-center justify-center mb-3">
+                  <svg width="20" height="20" fill="none" stroke="#22C55E" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>
                 </div>
-                <p className="text-sm font-medium text-gray-700">{file.name}</p>
-                <p className="text-xs text-gray-400 mt-1">{(file.size / 1024).toFixed(1)} KB</p>
+                <p className="text-[14px] font-medium text-[#374151]">{file.name}</p>
+                <p className="text-[12px] text-[#9CA3AF] mt-1">{(file.size / 1024).toFixed(1)} KB</p>
               </div>
             ) : (
-              <div>
-                <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <svg width="20" height="20" fill="none" stroke="#9CA3AF" strokeWidth="1.5" viewBox="0 0 24 24">
+              <div className="flex flex-col items-center">
+                <div className="w-10 h-10 bg-[#F3F4F6] rounded-full flex items-center justify-center mb-3 text-[#9CA3AF]">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-700 font-medium">
+                <p className="text-[14px] font-medium text-[#374151]">
                   {isDragActive ? 'Drop file here...' : 'Choose a file or drag & drop it here'}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">JPEG, PNG, up to 10MB</p>
+                <p className="text-[12px] text-[#9CA3AF] mt-1">JPEG, PNG, up to 10MB</p>
                 <button
                   type="button"
-                  className="mt-3 px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                  className="mt-4 px-4 py-1.5 bg-white border border-[#E5E7EB] rounded-lg text-[12px] font-medium text-[#374151] hover:bg-[#F9FAFB] transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 >
                   Browse Files
@@ -204,11 +205,11 @@ export default function CreateAssignmentPage() {
               </div>
             )}
           </div>
-          <p className="text-xs text-gray-400 text-center mb-6">Upload images of your preferred document/image</p>
+          <p className="text-[12px] text-[#9CA3AF] text-center mb-[24px]">Upload images of your preferred document/image</p>
 
           {/* Due Date */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-900 mb-1.5">
+            <label className="block text-[13px] font-medium text-[#111111] mb-1.5">
               Due Date <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -217,103 +218,117 @@ export default function CreateAssignmentPage() {
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
                 placeholder="Choose a chapter"
-                className={`w-full px-4 py-2.5 border rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-400 appearance-none ${errors.dueDate ? 'border-red-300' : 'border-gray-200'}`}
+                className={`w-full px-[16px] py-[10px] border rounded-lg text-[14px] text-[#111111] focus:outline-none focus:border-[#D1D5DB] transition-colors appearance-none ${errors.dueDate ? 'border-red-300' : 'border-[#E5E7EB]'}`}
               />
-              <svg className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+              <svg className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] pointer-events-none" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
               </svg>
             </div>
-            {errors.dueDate && <p className="text-xs text-red-500 mt-1">{errors.dueDate}</p>}
+            {errors.dueDate && <p className="text-[12px] text-red-500 mt-1">{errors.dueDate}</p>}
           </div>
 
           {/* Question Types */}
-          <div className="mb-6">
-            <div className="grid grid-cols-12 gap-2 mb-2 px-1">
-              <div className="col-span-6 text-xs font-medium text-gray-600">Question Type</div>
-              <div className="col-span-3 text-xs font-medium text-gray-600 text-center">No. of Questions</div>
-              <div className="col-span-2 text-xs font-medium text-gray-600 text-center">Marks</div>
-              <div className="col-span-1"></div>
+          <div className="mb-[24px]">
+            {/* Desktop Header Row */}
+            <div className="hidden md:grid grid-cols-12 gap-[12px] mb-2 px-1">
+              <div className="col-span-6 xl:col-span-7 text-[12px] font-medium text-[#6B7280]">Question Type</div>
+              <div className="col-span-3 xl:col-span-2 text-[12px] font-medium text-[#6B7280] text-center">No. of Questions</div>
+              <div className="col-span-3 text-[12px] font-medium text-[#6B7280] text-center">Marks</div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-[16px] md:space-y-[12px]">
               {questionTypes.map((row) => (
-                <div key={row.id} className="grid grid-cols-12 gap-2 items-center">
-                  <div className="col-span-6">
-                    <div className="relative">
+                <div key={row.id} className="flex flex-col md:grid md:grid-cols-12 gap-[12px] items-start md:items-center">
+                  
+                  {/* Dropdown & Remove Button (Desktop/Mobile merged flex behavior) */}
+                  <div className="w-full md:col-span-6 xl:col-span-7 flex items-center gap-[12px]">
+                    <div className="relative flex-1">
                       <select
                         value={row.type}
                         onChange={(e) => updateRow(row.id, 'type', e.target.value)}
-                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-400 appearance-none bg-white pr-8"
+                        className="w-full px-[16px] py-[10px] border border-[#E5E7EB] rounded-lg text-[13px] text-[#111111] focus:outline-none focus:border-[#D1D5DB] appearance-none bg-white pr-[32px] truncate"
                       >
                         {QUESTION_TYPES.map((t) => (
                           <option key={t} value={t}>{t}</option>
                         ))}
                       </select>
-                      <svg className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <svg className="absolute right-[12px] top-1/2 -translate-y-1/2 text-[#9CA3AF] pointer-events-none" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                       </svg>
                     </div>
-                  </div>
-                  <div className="col-span-3 flex items-center gap-1">
-                    <button
-                      onClick={() => updateRow(row.id, 'numQuestions', Math.max(1, row.numQuestions - 1))}
-                      className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 text-sm font-medium"
-                    >−</button>
-                    <div className="flex-1 text-center text-sm font-medium text-gray-800 border border-gray-200 rounded-lg py-1.5">
-                      {row.numQuestions}
-                    </div>
-                    <button
-                      onClick={() => updateRow(row.id, 'numQuestions', row.numQuestions + 1)}
-                      className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 text-sm font-medium"
-                    >+</button>
-                  </div>
-                  <div className="col-span-2 flex items-center gap-1">
-                    <button
-                      onClick={() => updateRow(row.id, 'marks', Math.max(1, row.marks - 1))}
-                      className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 text-sm font-medium"
-                    >−</button>
-                    <div className="flex-1 text-center text-sm font-medium text-gray-800 border border-gray-200 rounded-lg py-1.5">
-                      {row.marks}
-                    </div>
-                    <button
-                      onClick={() => updateRow(row.id, 'marks', row.marks + 1)}
-                      className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 text-sm font-medium"
-                    >+</button>
-                  </div>
-                  <div className="col-span-1 flex justify-center">
+                    {/* Remove button (Desktop: inline beside dropdown. Mobile: hidden here, or we keep it for both) */}
                     <button
                       onClick={() => removeQuestionType(row.id)}
-                      className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors"
+                      className="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#9CA3AF] hover:text-[#EF4444] transition-colors"
                     >
                       <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   </div>
+
+                  {/* Num Questions & Marks (Mobile row / Desktop columns) */}
+                  <div className="w-full md:w-auto md:col-span-6 xl:col-span-5 flex items-center justify-between md:grid md:grid-cols-2 gap-[12px] md:gap-0 pl-1 md:pl-0">
+                    
+                    {/* Num Questions */}
+                    <div className="flex items-center gap-[4px] md:justify-center w-auto md:w-full">
+                      <span className="md:hidden text-[12px] font-medium text-[#6B7280] mr-2">Questions:</span>
+                      <button
+                        onClick={() => updateRow(row.id, 'numQuestions', Math.max(1, row.numQuestions - 1))}
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
+                      >−</button>
+                      <div className="w-[28px] h-[28px] flex items-center justify-center text-[13px] font-medium text-[#111111] border border-[#E5E7EB] rounded-lg">
+                        {row.numQuestions}
+                      </div>
+                      <button
+                        onClick={() => updateRow(row.id, 'numQuestions', row.numQuestions + 1)}
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
+                      >+</button>
+                    </div>
+
+                    {/* Marks */}
+                    <div className="flex items-center gap-[4px] md:justify-center w-auto md:w-full">
+                      <span className="md:hidden text-[12px] font-medium text-[#6B7280] mr-2">Marks:</span>
+                      <button
+                        onClick={() => updateRow(row.id, 'marks', Math.max(1, row.marks - 1))}
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
+                      >−</button>
+                      <div className="w-[28px] h-[28px] flex items-center justify-center text-[13px] font-medium text-[#111111] border border-[#E5E7EB] rounded-lg">
+                        {row.marks}
+                      </div>
+                      <button
+                        onClick={() => updateRow(row.id, 'marks', row.marks + 1)}
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
+                      >+</button>
+                    </div>
+                  </div>
+
                 </div>
               ))}
             </div>
 
-            {errors.questionTypes && <p className="text-xs text-red-500 mt-2">{errors.questionTypes}</p>}
+            {errors.questionTypes && <p className="text-[12px] text-red-500 mt-2">{errors.questionTypes}</p>}
 
             <button
               onClick={addQuestionType}
-              className="flex items-center gap-2 mt-4 text-sm text-gray-700 font-medium hover:text-gray-900 transition-colors"
+              className="flex items-center gap-[8px] mt-[24px] text-[13px] font-medium text-[#374151] hover:text-[#111111] transition-colors"
             >
-              <span className="w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center text-white text-sm">+</span>
+              <div className="w-[28px] h-[28px] bg-[#111111] rounded-full flex items-center justify-center text-white text-[16px] font-medium">
+                +
+              </div>
               Add Question Type
             </button>
 
-            <div className="flex justify-end gap-6 mt-4 text-sm text-gray-700">
-              <span>Total Questions : <strong>{totalQuestions}</strong></span>
-              <span>Total Marks : <strong>{totalMarks}</strong></span>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-end gap-2 sm:gap-6 mt-[24px] pt-[24px] border-t border-[#F0F0F0] text-[13px] text-[#374151]">
+              <span>Total Questions : <strong className="font-bold text-[#111111]">{totalQuestions}</strong></span>
+              <span>Total Marks : <strong className="font-bold text-[#111111]">{totalMarks}</strong></span>
             </div>
           </div>
 
           {/* Additional Info */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-900 mb-1.5">
-              Additional Information <span className="text-gray-400 font-normal">(For better output)</span>
+          <div className="mb-2">
+            <label className="block text-[13px] font-medium text-[#111111] mb-1.5">
+              Additional Information <span className="font-normal">(For better output)</span>
             </label>
             <div className="relative">
               <textarea
@@ -321,29 +336,28 @@ export default function CreateAssignmentPage() {
                 value={additionalInstructions}
                 onChange={(e) => setAdditionalInstructions(e.target.value)}
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 resize-none"
+                className="w-full px-[16px] py-[12px] border border-[#E5E7EB] rounded-xl text-[14px] text-[#111111] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D1D5DB] resize-none pb-8"
               />
-              <svg className="absolute right-3 bottom-3 text-gray-400" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                <line x1="12" y1="19" x2="12" y2="23"/>
-                <line x1="8" y1="23" x2="16" y2="23"/>
-              </svg>
+              <button className="absolute right-[12px] bottom-[12px] text-[#9CA3AF] hover:text-[#374151] transition-colors p-1">
+                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+                </svg>
+              </button>
             </div>
           </div>
 
           {errors.submit && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600">
+            <div className="mt-4 p-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600">
               {errors.submit}
             </div>
           )}
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 sm:gap-0 mt-[32px]">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 px-6 py-2.5 border border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 bg-white transition-colors"
+            className="w-full sm:w-auto flex items-center justify-center gap-[6px] h-[40px] px-[24px] border border-[#E5E7EB] rounded-full text-[13px] font-medium text-[#374151] bg-white hover:bg-[#F9FAFB] transition-colors"
           >
             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -353,12 +367,12 @@ export default function CreateAssignmentPage() {
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="flex items-center gap-2 px-8 py-2.5 rounded-full text-sm font-medium text-white transition-all disabled:opacity-60"
+            className="w-full sm:w-auto flex items-center justify-center gap-[6px] h-[40px] px-[24px] rounded-full text-[13px] font-medium text-white transition-all disabled:opacity-60"
             style={{ background: '#111111' }}
           >
             {submitting ? (
               <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-[14px] h-[14px] border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 Generating...
               </>
             ) : (
