@@ -17,56 +17,15 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
   const assignmentCount = assignments.length
 
   const navItems = [
-    {
-      label: 'Home',
-      href: '/',
-      icon: (
-        <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25A2.25 2.25 0 0113.5 8.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-        </svg>
-      ),
-    },
-    {
-      label: 'My Groups',
-      href: '/groups',
-      icon: (
-        <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-        </svg>
-      ),
-    },
-    {
-      label: 'Assignments',
-      href: '/assignments',
-      icon: (
-        <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-        </svg>
-      ),
-    },
-    {
-      label: "AI Teacher's Toolkit",
-      href: '/toolkit',
-      icon: (
-        <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776" />
-        </svg>
-      ),
-    },
-    {
-      label: 'My Library',
-      href: '/library',
-      icon: (
-        <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
-    },
+    { label: 'Home', href: '/', icon: '/icons/home.svg' },
+    { label: 'My Groups', href: '/groups', icon: '/icons/myGroups.svg' },
+    { label: 'Assignments', href: '/assignments', icon: '/icons/assignment.svg' },
+    { label: "AI Teacher's Toolkit", href: '/toolkit', icon: '/icons/aiTeacherToolkit.svg' },
+    { label: 'My Library', href: '/library', icon: '/icons/myLibrary.svg' },
   ]
 
   return (
     <>
-      {/* Desktop + Mobile Sidebar */}
       <aside
         className={`flex flex-col w-[240px] min-h-screen bg-white border-r border-gray-100 fixed left-0 top-0 z-30 transition-transform duration-300 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
@@ -89,33 +48,29 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
         {/* Create Assignment Button */}
         <div className="px-4 mb-6">
           <button
-  onClick={() => {
-    router.push('/assignments/create')
-    onMobileClose?.()
-  }}
-  className="w-full flex items-center justify-center gap-2 text-white text-[14px] font-medium transition-all hover:opacity-90 active:scale-95"
-  style={{
-  background: '#2A2A2A',
-  border: '2.5px solid #E8431C',
-  borderRadius: '999px',
-  height: '44px',
-  boxShadow: '0 0 0 1px rgba(232,67,28,0.4)',
-}}
->
-  {/* 4-pointed star icon */}
-  <div className="relative flex items-center justify-center w-5 h-5">
-  {/* Big 4-pointed star */}
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="white" style={{ position: 'absolute' }}>
-    <path d="M12 2C12 2 13.5 8.5 15 10C16.5 11.5 22 12 22 12C22 12 16.5 12.5 15 14C13.5 15.5 12 22 12 22C12 22 10.5 15.5 9 14C7.5 12.5 2 12 2 12C2 12 7.5 11.5 9 10C10.5 8.5 12 2 12 2Z" />
-  </svg>
-  {/* Small 4-pointed star — top right diagonal */}
-  <svg width="8" height="8" viewBox="0 0 24 24" fill="white" style={{ position: 'absolute', top: '-2px', right: '-3px' }}>
-    <path d="M12 2C12 2 13.5 8.5 15 10C16.5 11.5 22 12 22 12C22 12 16.5 12.5 15 14C13.5 15.5 12 22 12 22C12 22 10.5 15.5 9 14C7.5 12.5 2 12 2 12C2 12 7.5 11.5 9 10C10.5 8.5 12 2 12 2Z" />
-    
-  </svg>
-</div>
-  Create Assignment
-</button>
+            onClick={() => {
+              router.push('/assignments/create')
+              onMobileClose?.()
+            }}
+            className="w-full flex items-center justify-center gap-2 text-white text-[14px] font-medium transition-all hover:opacity-90 active:scale-95"
+            style={{
+              background: '#2A2A2A',
+              border: '2.5px solid #E8431C',
+              borderRadius: '999px',
+              height: '44px',
+              boxShadow: '0 0 0 1px rgba(232,67,28,0.4)',
+            }}
+          >
+            <div className="relative flex items-center justify-center w-5 h-5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white" style={{ position: 'absolute' }}>
+                <path d="M12 2C12 2 13.5 8.5 15 10C16.5 11.5 22 12 22 12C22 12 16.5 12.5 15 14C13.5 15.5 12 22 12 22C12 22 10.5 15.5 9 14C7.5 12.5 2 12 2 12C2 12 7.5 11.5 9 10C10.5 8.5 12 2 12 2Z" />
+              </svg>
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="white" style={{ position: 'absolute', top: '-2px', right: '-3px' }}>
+                <path d="M12 2C12 2 13.5 8.5 15 10C16.5 11.5 22 12 22 12C22 12 16.5 12.5 15 14C13.5 15.5 12 22 12 22C12 22 10.5 15.5 9 14C7.5 12.5 2 12 2 12C2 12 7.5 11.5 9 10C10.5 8.5 12 2 12 2Z" />
+              </svg>
+            </div>
+            Create Assignment
+          </button>
         </div>
 
         {/* Nav Items */}
@@ -143,9 +98,17 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
                     : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800 font-medium'
                 }`}
               >
-                <span className={active ? 'text-gray-700' : 'text-gray-400'}>
-                  {item.icon}
-                </span>
+                <img
+                  src={item.icon}
+                  alt={item.label}
+                  width={22}
+                  height={22}
+                  style={{
+                    filter: active
+                      ? 'brightness(0) saturate(100%)'
+                      : 'brightness(0) saturate(100%) opacity(35%)',
+                  }}
+                />
                 <span className="flex-1">{item.label}</span>
                 {item.label === 'Assignments' && assignmentCount > 0 && (
                   <span
@@ -172,7 +135,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
             }`}
           >
             <span className={pathname === '/settings' ? 'text-gray-700' : 'text-gray-400'}>
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+              <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -181,24 +144,24 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
           </Link>
 
           {/* School Card */}
-          {/* School Card */}
-<div className="flex items-center gap-3 px-3 py-3 bg-gray-50 rounded-2xl mt-2">
-  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center"
-    style={{ background: avatar ? 'transparent' : 'linear-gradient(135deg, #E8431C, #FF6B35)' }}
-  >
-    {avatar ? (
-      <img src={avatar} alt={name} className="w-full h-full object-cover" />
-    ) : (
-      <span className="text-sm font-bold text-white">
-        {schoolName.charAt(0).toUpperCase()}
-      </span>
-    )}
-  </div>
-  <div className="min-w-0">
-    <p className="text-[13px] font-bold text-gray-900 truncate">{schoolName}</p>
-    <p className="text-[11px] text-gray-500 truncate">{city}</p>
-  </div>
-</div>
+          <div className="flex items-center gap-3 px-3 py-3 bg-gray-50 rounded-2xl mt-2">
+            <div
+              className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center"
+              style={{ background: avatar ? 'transparent' : 'linear-gradient(135deg, #E8431C, #FF6B35)' }}
+            >
+              {avatar ? (
+                <img src={avatar} alt={name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-sm font-bold text-white">
+                  {schoolName.charAt(0).toUpperCase()}
+                </span>
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="text-[13px] font-bold text-gray-900 truncate">{schoolName}</p>
+              <p className="text-[11px] text-gray-500 truncate">{city}</p>
+            </div>
+          </div>
         </div>
       </aside>
 
@@ -208,10 +171,10 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
         style={{ background: '#111111' }}
       >
         {[
-          { label: 'Home', href: '/', icon: navItems[0].icon },
-          { label: 'My Groups', href: '/groups', icon: navItems[1].icon },
-          { label: 'Library', href: '/library', icon: navItems[4].icon },
-          { label: 'AI Toolkit', href: '/toolkit', icon: navItems[3].icon },
+          { label: 'Home', href: '/', icon: '/icons/home.svg' },
+          { label: 'My Groups', href: '/groups', icon: '/icons/myGroups.svg' },
+          { label: 'Library', href: '/library', icon: '/icons/myLibrary.svg' },
+          { label: 'AI Toolkit', href: '/toolkit', icon: '/icons/aiTeacherToolkit.svg' },
         ].map((item) => {
           const active = pathname === item.href
           return (
@@ -220,8 +183,21 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
               href={item.href}
               className="flex flex-col items-center gap-1 px-4 py-1"
             >
-              <span style={{ color: active ? '#E8431C' : '#9CA3AF' }}>{item.icon}</span>
-              <span className="text-[10px]" style={{ color: active ? '#E8431C' : '#6B7280' }}>
+              <img
+                src={item.icon}
+                alt={item.label}
+                width={24}
+                height={24}
+                style={{
+                  filter: active
+                    ? 'brightness(0) saturate(100%) invert(35%) sepia(90%) saturate(1000%) hue-rotate(340deg)'
+                    : 'brightness(0) saturate(100%) invert(60%)',
+                }}
+              />
+              <span
+                className="text-[10px]"
+                style={{ color: active ? '#E8431C' : '#6B7280' }}
+              >
                 {item.label}
               </span>
             </Link>
