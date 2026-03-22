@@ -264,14 +264,17 @@ The core challenge was building a system where:
 
 ---
 
-## ⚠️ Known Limitations
+## ⚠️ Known Limitations & Usage Tips
 
-- **Cold start delay** — Render free tier sleeps after 15 mins of inactivity. First request takes 30-60 seconds. Keep-alive ping reduces this but doesn't eliminate it entirely.
-- **LLM response time** — NVIDIA free tier can take 15-30 seconds to generate a full paper depending on load.
-- **WebSocket on first load** — On production, if WebSocket connects after generation completes, the frontend falls back to 2-second polling to fetch the result.
+- **Cold start delay** — Backend is hosted on Render free tier and sleeps after 15 mins of inactivity. First request may take 30-60 seconds to wake up. Keep-alive ping reduces this but doesn't eliminate it entirely.
 
----
+- **Assignment generation time** — After clicking "Next", please wait up to 60 seconds for the AI to generate your question paper. The page will update automatically when ready. If it stays on "Starting generation..." for more than 60 seconds, refresh the page once.
 
+- **Page stuck on "Starting generation..."** — If the output page doesn't update after 60 seconds, simply refresh the page. Your assignment is saved and the generated paper will appear after refresh.
+
+- **LLM response time** — NVIDIA free tier can take 15-30 seconds to generate a full paper depending on server load.
+
+- **File uploads** — Only text (.txt) files are used for AI context. Image uploads are accepted but not processed by the AI (only the form details are used for generation).
 ## 👨‍💻 Author
 
 Built by Mohit Sharma as part of the VedaAI Full Stack Engineering Assignment.
