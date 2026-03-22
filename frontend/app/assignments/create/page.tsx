@@ -107,12 +107,10 @@ export default function CreateAssignmentPage() {
     setGenerating(true)
     router.push(`/assignments/${res.data.data._id}`)
   } catch (err: any) {
-    // If timeout — backend might still be processing
-    // Try to find the assignment that was just created
     if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
-      setErrors({ submit: 'Server is waking up, please try again in 30 seconds...' })
+      setErrors({ submit: '⏳ Taking longer than usual. Check Assignments page — your paper may already be generating.' })
     } else {
-      setErrors({ submit: err?.response?.data?.error || 'Something went wrong. Please try again.' })
+      setErrors({ submit: '⚠️ Couldn\'t connect. Check the Assignments page — your request may have gone through.' })
     }
   } finally {
     setSubmitting(false)
