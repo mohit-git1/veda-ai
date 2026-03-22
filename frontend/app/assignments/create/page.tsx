@@ -25,7 +25,7 @@ const QUESTION_TYPES = [
 
 export default function CreateAssignmentPage() {
   const router = useRouter()
-  const { addAssignment } = useAssignmentStore()
+  const { addAssignment, setGenerating } = useAssignmentStore()
 
   const [title, setTitle] = useState('')
   const [subject, setSubject] = useState('')
@@ -104,6 +104,10 @@ export default function CreateAssignmentPage() {
 
       const res = await assignmentsApi.create(formData)
       addAssignment(res.data.data)
+
+      // Set generating BEFORE navigating so output page shows spinner immediately
+      setGenerating(true)
+
       router.push(`/assignments/${res.data.data._id}`)
     } catch (err: any) {
       setErrors({ submit: err?.response?.data?.error || 'Something went wrong' })
@@ -151,7 +155,9 @@ export default function CreateAssignmentPage() {
 
           {/* Subject */}
           <div className="mb-6">
-            <label className="block text-[13px] font-medium text-[#111111] mb-1.5">Subject</label>
+            <label className="block text-[13px] font-medium text-[#111111] mb-1.5">
+              Subject <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               placeholder="e.g. Science, Mathematics"
@@ -172,7 +178,7 @@ export default function CreateAssignmentPage() {
           <div
             {...getRootProps()}
             className={`border-2 border-dashed rounded-[12px] p-[32px] text-center cursor-pointer transition-colors mb-3 ${
-              isDragActive ? 'border-[#9CA3AF] bg-[#F9FAFB]' : 
+              isDragActive ? 'border-[#9CA3AF] bg-[#F9FAFB]' :
               file ? 'border-[#22C55E] bg-[#F0FDF4]' : 'border-[#E5E7EB] hover:border-[#D1D5DB]'
             }`}
           >
@@ -215,29 +221,18 @@ export default function CreateAssignmentPage() {
             <label className="block text-[13px] font-medium text-[#111111] mb-1.5">
               Due Date <span className="text-red-500">*</span>
             </label>
-            <div className="relative">
-              <input
-  type="date"
-  value={dueDate}
-  onChange={(e) => setDueDate(e.target.value)}
-  className={`w-full px-4 py-2.5 border rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-400 ${errors.dueDate ? 'border-red-300' : 'border-gray-200'}`}
-  style={{
-    colorScheme: 'light',
-    WebkitAppearance: 'none',
-  }}
-/>
-              
-             
-              {/* <svg className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] pointer-events-none" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg> */}
-            </div>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              className={`w-full px-4 py-2.5 border rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-400 ${errors.dueDate ? 'border-red-300' : 'border-gray-200'}`}
+              style={{ colorScheme: 'light', WebkitAppearance: 'none' }}
+            />
             {errors.dueDate && <p className="text-[12px] text-red-500 mt-1">{errors.dueDate}</p>}
           </div>
 
           {/* Question Types */}
           <div className="mb-[24px]">
-            {/* Desktop Header Row */}
             <div className="hidden md:grid grid-cols-12 gap-[12px] mb-2 px-1">
               <div className="col-span-6 xl:col-span-7 text-[12px] font-medium text-[#6B7280]">Question Type</div>
               <div className="col-span-3 xl:col-span-2 text-[12px] font-medium text-[#6B7280] text-center">No. of Questions</div>
@@ -247,8 +242,6 @@ export default function CreateAssignmentPage() {
             <div className="space-y-[16px] md:space-y-[12px]">
               {questionTypes.map((row) => (
                 <div key={row.id} className="flex flex-col md:grid md:grid-cols-12 gap-[12px] items-start md:items-center">
-                  
-                  {/* Dropdown & Remove Button (Desktop/Mobile merged flex behavior) */}
                   <div className="w-full md:col-span-6 xl:col-span-7 flex items-center gap-[12px]">
                     <div className="relative flex-1">
                       <select
@@ -264,7 +257,6 @@ export default function CreateAssignmentPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                       </svg>
                     </div>
-                    {/* Remove button (Desktop: inline beside dropdown. Mobile: hidden here, or we keep it for both) */}
                     <button
                       onClick={() => removeQuestionType(row.id)}
                       className="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#9CA3AF] hover:text-[#EF4444] transition-colors"
@@ -275,50 +267,45 @@ export default function CreateAssignmentPage() {
                     </button>
                   </div>
 
-                  {/* Num Questions & Marks (Mobile row / Desktop columns) */}
                   <div className="w-full md:w-auto md:col-span-6 xl:col-span-5 flex items-center justify-between md:grid md:grid-cols-2 gap-[12px] md:gap-0 pl-1 md:pl-0">
-                    
-                    {/* Num Questions */}
                     <div className="flex items-center gap-[4px] md:justify-center w-auto md:w-full">
                       <span className="md:hidden text-[12px] font-medium text-[#6B7280] mr-2">Questions:</span>
                       <button
                         onClick={() => updateRow(row.id, 'numQuestions', Math.max(1, row.numQuestions - 1))}
-                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors focus:outline-none"
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
                       >−</button>
                       <input
                         type="number"
                         min="1"
                         value={row.numQuestions}
-                        onChange={(e) => updateRow(row.id, 'numQuestions', parseInt(e.target.value) || 0)}
-                        className="w-[28px] h-[28px] flex text-center items-center justify-center text-[13px] font-medium text-[#111111] border border-[#E5E7EB] rounded-lg focus:outline-none focus:border-[#D1D5DB] hide-number-spinners"
+                        onChange={(e) => updateRow(row.id, 'numQuestions', parseInt(e.target.value) || 1)}
+                        className="w-[28px] h-[28px] text-center text-[13px] font-medium text-[#111111] border border-[#E5E7EB] rounded-lg focus:outline-none"
                       />
                       <button
                         onClick={() => updateRow(row.id, 'numQuestions', row.numQuestions + 1)}
-                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors focus:outline-none"
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
                       >+</button>
                     </div>
 
-                    {/* Marks */}
                     <div className="flex items-center gap-[4px] md:justify-center w-auto md:w-full">
                       <span className="md:hidden text-[12px] font-medium text-[#6B7280] mr-2">Marks:</span>
                       <button
                         onClick={() => updateRow(row.id, 'marks', Math.max(1, row.marks - 1))}
-                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors focus:outline-none"
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
                       >−</button>
                       <input
                         type="number"
                         min="1"
                         value={row.marks}
-                        onChange={(e) => updateRow(row.id, 'marks', parseInt(e.target.value) || 0)}
-                        className="w-[28px] h-[28px] flex text-center items-center justify-center text-[13px] font-medium text-[#111111] border border-[#E5E7EB] rounded-lg focus:outline-none focus:border-[#D1D5DB] hide-number-spinners"
+                        onChange={(e) => updateRow(row.id, 'marks', parseInt(e.target.value) || 1)}
+                        className="w-[28px] h-[28px] text-center text-[13px] font-medium text-[#111111] border border-[#E5E7EB] rounded-lg focus:outline-none"
                       />
                       <button
                         onClick={() => updateRow(row.id, 'marks', row.marks + 1)}
-                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors focus:outline-none"
+                        className="w-[28px] h-[28px] rounded-lg border border-[#E5E7EB] flex items-center justify-center text-[#374151] hover:bg-[#F3F4F6] text-sm font-medium transition-colors"
                       >+</button>
                     </div>
                   </div>
-
                 </div>
               ))}
             </div>
