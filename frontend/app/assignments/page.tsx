@@ -20,6 +20,23 @@ export default function AssignmentsPage() {
       .finally(() => setLoading(false))
   }, [])
 
+  useEffect(() => {
+    // If any assignment is pending or processing, poll every 3 seconds
+    const hasPending = assignments.some(a => a.status === 'pending' || a.status === 'processing')
+    if (!hasPending) return
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await assignmentsApi.getAll()
+        setAssignments(res.data.data)
+      } catch (err) {
+        console.error(err)
+      }
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [assignments])
+
   const handleDelete = async (id: string) => {
     try {
       await assignmentsApi.delete(id)
@@ -40,39 +57,43 @@ export default function AssignmentsPage() {
 
   const StatusBadge = ({ status }: { status: Assignment['status'] }) => {
     const map = {
-      pending: { 
-        label: 'Pending', 
-        bg: '#FEF3C7', 
+      pending: {
+        label: 'Pending',
+        bg: '#FEF3C7',
         color: '#D97706',
-        dot: '#F59E0B'
+        dot: '#F59E0B',
+        pulse: false
       },
-      processing: { 
-        label: 'Generating...', 
-        bg: '#DBEAFE', 
+      processing: {
+        label: 'Generating...',
+        bg: '#DBEAFE',
         color: '#2563EB',
-        dot: '#3B82F6'
+        dot: '#3B82F6',
+        pulse: true
       },
-      completed: { 
-        label: 'Ready', 
-        bg: '#DCFCE7', 
+      completed: {
+        label: '✓ Ready',
+        bg: '#DCFCE7',
         color: '#16A34A',
-        dot: '#22C55E'
+        dot: '#22C55E',
+        pulse: false
       },
-      failed: { 
-        label: 'Failed', 
-        bg: '#FEE2E2', 
+      failed: {
+        label: 'Failed — Click to retry',
+        bg: '#FEE2E2',
         color: '#DC2626',
-        dot: '#EF4444'
+        dot: '#EF4444',
+        pulse: false
       },
     }
     const s = map[status]
     return (
-      <span 
+      <span
         className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full"
         style={{ background: s.bg, color: s.color }}
       >
-        <span 
-          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+        <span
+          className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${s.pulse ? 'animate-pulse' : ''}`}
           style={{ background: s.dot }}
         />
         {s.label}
@@ -166,6 +187,26 @@ export default function AssignmentsPage() {
             </div>
             <p className="text-[13px] text-[#6B7280] ml-[16px]">Manage and create assignments for your classes.</p>
           </div>
+
+          {assignments.some(a => a.status === 'processing' || a.status === 'pending') && (
+            <div
+              className="flex items-center gap-3 px-4 py-3 rounded-xl mb-4 text-sm font-medium"
+              style={{ background: '#DBEAFE', color: '#1D4ED8' }}
+            >
+              <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse flex-shrink-0" />
+              AI is generating your question paper... This may take up to 60 seconds. You can wait here or come back later.
+            </div>
+          )}
+
+          {assignments.some(a => a.status === 'completed') && assignments[0]?.status === 'completed' && (
+            <div
+              className="flex items-center gap-3 px-4 py-3 rounded-xl mb-4 text-sm font-medium"
+              style={{ background: '#DCFCE7', color: '#15803D' }}
+            >
+              <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0" />
+              ✓ Your question paper is ready! Click on the assignment to view it.
+            </div>
+          )}
 
           {/* Filter + Search */}
           <div className="flex items-center gap-[12px] mb-[24px]">
