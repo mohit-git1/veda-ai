@@ -1,5 +1,10 @@
 # VedaAI — AI Assessment Creator
+> ⚠️ **Important Notes:**
+> - **Slow loading?** The backend runs on Render free tier and may take **30-60 seconds to wake up** on first visit. Please wait or refresh if stuck.
+> - **Generation stuck?** If the page stops loading or gets stuck for more than 30 seconds, simply refresh the page. Your assignment is saved and will continue generating in the background.
+> - **First time using?** Open the app and wait 30 seconds before creating your first assignment — this lets the backend wake up so generation works smoothly.
 
+---
 > A full-stack AI-powered assessment creator that allows teachers to generate structured question papers using LLMs, with real-time updates via WebSockets.
 
 ## 🔗 Live Demo
