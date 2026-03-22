@@ -41,10 +41,10 @@ export default function AssignmentsPage() {
     try {
       await assignmentsApi.delete(id)
       removeAssignment(id)
+      setOpenMenu(null)
     } catch (err) {
-      console.error(err)
+      console.error('Delete failed:', err)
     }
-    setOpenMenu(null)
   }
 
   const filtered = assignments.filter((a) =>
@@ -251,7 +251,10 @@ export default function AssignmentsPage() {
                   </div>
                   <div className="relative">
                     <button
-                      onClick={() => setOpenMenu(openMenu === assignment._id ? null : assignment._id)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setOpenMenu(openMenu === assignment._id ? null : assignment._id)
+                      }}
                       className="p-1 hover:bg-[#F9FAFB] rounded-lg transition-colors text-[#9CA3AF] hover:text-[#374151]"
                     >
                       <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
@@ -261,13 +264,20 @@ export default function AssignmentsPage() {
                     {openMenu === assignment._id && (
                       <div className="absolute right-0 top-8 bg-white border border-[#F0F0F0] rounded-[12px] shadow-md z-50 py-1.5 w-44">
                         <button
-                          onClick={() => { router.push(`/assignments/${assignment._id}`); setOpenMenu(null) }}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            router.push(`/assignments/${assignment._id}`)
+                            setOpenMenu(null)
+                          }}
                           className="w-full text-left px-4 py-2 text-[14px] text-[#374151] hover:bg-[#F9FAFB]"
                         >
                           View Assignment
                         </button>
                         <button
-                          onClick={() => handleDelete(assignment._id)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDelete(assignment._id)
+                          }}
                           className="w-full text-left px-4 py-2 text-[14px] text-[#EF4444] hover:bg-red-50"
                         >
                           Delete
