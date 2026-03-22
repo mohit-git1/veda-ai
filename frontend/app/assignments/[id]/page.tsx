@@ -9,7 +9,7 @@ import { useUserStore } from '@/store/userStore'
 
 const DifficultyBadge = ({ difficulty }: { difficulty: string }) => {
   const d = difficulty.toLowerCase()
-  let colorClass = 'bg-[#F3F4F6] text-[#6B7280]' // default
+  let colorClass = 'bg-[#F3F4F6] text-[#6B7280]'
 
   if (d.includes('easy')) {
     colorClass = 'bg-[#DCFCE7] text-[#15803D]'
@@ -29,20 +29,39 @@ const DifficultyBadge = ({ difficulty }: { difficulty: string }) => {
 export default function AssignmentOutputPage() {
   const { id } = useParams<{ id: string }>()
   const router = useRouter()
-  const { currentAssignment, currentResult, setCurrentAssignment, setCurrentResult, isGenerating, setGenerating } = useAssignmentStore()
+  const {
+    currentAssignment,
+    currentResult,
+    setCurrentAssignment,
+    setCurrentResult,
+    isGenerating,
+    setGenerating
+  } = useAssignmentStore()
   const { name } = useUserStore()
   const [loading, setLoading] = useState(true)
   const [regenerating, setRegenerating] = useState(false)
   const paperRef = useRef<HTMLDivElement>(null)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   useWebSocket(id)
 
   const fetchData = async () => {
     try {
       const res = await assignmentsApi.getOne(id)
-      setCurrentAssignment(res.data.data.assignment)
-      setCurrentResult(res.data.data.result)
-      if (['pending', 'processing'].includes(res.data.data.assignment.status)) {
+      const assignment = res.data.data.assignment
+      const result = res.data.data.result
+
+      setCurrentAssignment(assignment)
+      setCurrentResult(result)
+
+      if (assignment.status === 'completed' || assignment.status === 'failed') {
+        setGenerating(false)
+        // Stop polling when done
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current)
+          intervalRef.current = null
+        }
+      } else {
         setGenerating(true)
       }
     } catch (err) {
@@ -52,24 +71,19 @@ export default function AssignmentOutputPage() {
     }
   }
 
+  // Initial fetch + always start polling
   useEffect(() => {
     fetchData()
-  }, [id])
 
-  // Poll when generating
-  useEffect(() => {
-    if (!isGenerating) return
-    const interval = setInterval(fetchData, 2000)
-    return () => clearInterval(interval)
-  }, [isGenerating])
+    // Always poll every 2 seconds — stops automatically when completed/failed
+    intervalRef.current = setInterval(fetchData, 2000)
 
-  // Listen for WS complete
-  useEffect(() => {
-    const handler = (e: CustomEvent) => {
-      if (e.detail.assignmentId === id) fetchData()
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
     }
-    window.addEventListener('generation:complete', handler as any)
-    return () => window.removeEventListener('generation:complete', handler as any)
   }, [id])
 
   const handleRegenerate = async () => {
@@ -78,6 +92,10 @@ export default function AssignmentOutputPage() {
       await assignmentsApi.regenerate(id)
       setCurrentResult(null)
       setGenerating(true)
+
+      // Restart polling
+      if (intervalRef.current) clearInterval(intervalRef.current)
+      intervalRef.current = setInterval(fetchData, 2000)
     } catch (err) {
       console.error(err)
     } finally {
@@ -110,10 +128,16 @@ export default function AssignmentOutputPage() {
               <div className="flex items-center gap-[12px]">
                 <div className="flex gap-1.5">
                   {[0, 1, 2].map((i) => (
-                    <div key={i} className="w-[6px] h-[6px] bg-[#9CA3AF] rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                    <div
+                      key={i}
+                      className="w-[6px] h-[6px] bg-[#9CA3AF] rounded-full animate-bounce"
+                      style={{ animationDelay: `${i * 0.15}s` }}
+                    />
                   ))}
                 </div>
-                <p className="text-[15px] font-medium text-white pb-[20px]">Generating your question paper...</p>
+                <p className="text-[15px] font-medium text-white pb-[20px]">
+                  Generating your question paper...
+                </p>
               </div>
             ) : currentResult ? (
               <>
@@ -126,7 +150,7 @@ export default function AssignmentOutputPage() {
                     className="flex items-center justify-center gap-[8px] h-[44px] px-[24px] rounded-full text-[14px] font-bold text-white transition-all bg-[#22C55E] hover:bg-[#16A34A] active:scale-95 shadow-sm"
                   >
                     <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5h.01M9 20.25H9.01M6.75 18.375H6.76M11.25 18.375H11.26" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg>
                     Download as PDF
                   </button>
@@ -154,7 +178,11 @@ export default function AssignmentOutputPage() {
 
         {/* Question Paper */}
         {currentResult && (
-          <div ref={paperRef} id="printable-assignment" className="bg-white rounded-[16px] border border-[#F0F0F0] p-[16px] md:p-[32px] md:px-[40px] print:shadow-none print:border-none print:rounded-none">
+          <div
+            ref={paperRef}
+            id="printable-assignment"
+            className="bg-white rounded-[16px] border border-[#F0F0F0] p-[16px] md:p-[32px] md:px-[40px] print:shadow-none print:border-none print:rounded-none"
+          >
             {/* School Header */}
             <div className="text-center mb-[16px] pb-[16px] border-b border-[#E5E7EB]">
               <h1 className="text-[15px] md:text-[17px] font-bold text-[#111111]">{currentResult.schoolName}</h1>
@@ -168,45 +196,46 @@ export default function AssignmentOutputPage() {
               <span>Maximum Marks: {currentResult.maximumMarks}</span>
             </div>
 
-            <p className="text-[12px] text-[#6B7280] italic mb-[24px]">All questions are compulsory unless stated otherwise.</p>
+            <p className="text-[12px] text-[#6B7280] italic mb-[24px]">
+              All questions are compulsory unless stated otherwise.
+            </p>
 
             {/* Student Info */}
             <div className="mb-[24px] space-y-[12px]">
-              <div className="flex items-end gap-[8px] text-[13px] text-[#374151]">
-                <span className="flex-shrink-0 leading-none">Name:</span>
-                <div className="flex-1 border-b border-[#9CA3AF]" />
-              </div>
-              <div className="flex items-end gap-[8px] text-[13px] text-[#374151]">
-                <span className="flex-shrink-0 leading-none">Roll Number:</span>
-                <div className="flex-1 border-b border-[#9CA3AF]" />
-              </div>
-              <div className="flex items-end gap-[8px] text-[13px] text-[#374151]">
-                <span className="flex-shrink-0 leading-none">Class: {currentResult.className} Section:</span>
-                <div className="flex-1 border-b border-[#9CA3AF]" />
-              </div>
+              {['Name', 'Roll Number', `Class: ${currentResult.className} Section`].map((label) => (
+                <div key={label} className="flex items-end gap-[8px] text-[13px] text-[#374151]">
+                  <span className="flex-shrink-0 leading-none">{label}:</span>
+                  <div className="flex-1 border-b border-[#9CA3AF]" />
+                </div>
+              ))}
             </div>
 
             {/* Sections */}
             {currentResult.sections.map((section) => (
               <div key={section.id} className="mb-[32px]">
-                <h2 className="text-center font-bold text-[#111111] text-[15px] mt-[24px] mb-[4px]">{section.title}</h2>
+                <h2 className="text-center font-bold text-[#111111] text-[15px] mt-[24px] mb-[4px]">
+                  {section.title}
+                </h2>
                 <div className="text-center mb-[16px]">
-                  <span className="text-[12px] text-[#6B7280] italic">
-                    <span className="font-bold">{section.instruction.split('—')[0] || ''}</span>
-                    {section.instruction.includes('—') ? ' — ' + section.instruction.split('—').slice(1).join('—') : section.instruction}
-                  </span>
+                  <span className="text-[12px] text-[#6B7280] italic">{section.instruction}</span>
                 </div>
 
                 <div className="flex flex-col gap-[12px]">
                   {section.questions.map((q, qi) => (
                     <div key={q.id} className="flex gap-[8px]">
-                      <span className="text-[13px] font-medium text-[#374151] flex-shrink-0 w-[24px]">{qi + 1}.</span>
+                      <span className="text-[13px] font-medium text-[#374151] flex-shrink-0 w-[24px]">
+                        {qi + 1}.
+                      </span>
                       <div className="flex-1">
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-[8px]">
-                          <p className="text-[13px] text-[#374151] leading-[1.6] flex-1 whitespace-pre-wrap">{q.text}</p>
+                          <p className="text-[13px] text-[#374151] leading-[1.6] flex-1 whitespace-pre-wrap">
+                            {q.text}
+                          </p>
                           <div className="flex items-center gap-[8px] flex-shrink-0">
                             <DifficultyBadge difficulty={q.difficulty} />
-                            <span className="text-[11px] text-[#6B7280] whitespace-nowrap">[{q.marks} Marks]</span>
+                            <span className="text-[11px] text-[#6B7280] whitespace-nowrap">
+                              [{q.marks} Marks]
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -232,8 +261,12 @@ export default function AssignmentOutputPage() {
                     <div className="flex flex-col gap-[12px]">
                       {section.questions.filter((q) => q.answer).map((q, qi) => (
                         <div key={q.id} className="flex gap-[8px]">
-                          <span className="text-[13px] font-medium text-[#374151] flex-shrink-0 w-[24px]">{qi + 1}.</span>
-                          <p className="text-[13px] text-[#374151] leading-[1.7] flex-1 whitespace-pre-wrap">{q.answer}</p>
+                          <span className="text-[13px] font-medium text-[#374151] flex-shrink-0 w-[24px]">
+                            {qi + 1}.
+                          </span>
+                          <p className="text-[13px] text-[#374151] leading-[1.7] flex-1 whitespace-pre-wrap">
+                            {q.answer}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -251,7 +284,11 @@ export default function AssignmentOutputPage() {
             <div className="h-4 bg-[#F3F4F6] rounded w-40 mx-auto mb-6" />
             <div className="space-y-[12px]">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-3 bg-[#F3F4F6] rounded" style={{ width: `${85 - i * 5}%` }} />
+                <div
+                  key={i}
+                  className="h-3 bg-[#F3F4F6] rounded"
+                  style={{ width: `${85 - i * 5}%` }}
+                />
               ))}
             </div>
           </div>
