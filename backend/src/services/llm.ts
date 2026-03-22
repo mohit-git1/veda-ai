@@ -7,16 +7,16 @@ const client = new OpenAI({
 })
 
 const QuestionSchema = z.object({
-  id: z.number(),
+  id: z.union([z.string(), z.number()]).transform(val => String(val)),
   text: z.string(),
   type: z.string(),
   difficulty: z.enum(['easy', 'medium', 'hard']),
-  marks: z.number(),
+  marks: z.union([z.string(), z.number()]).transform(val => Number(val)),
   answer: z.string().optional()
 })
 
 const SectionSchema = z.object({
-  id: z.string(),
+  id: z.union([z.string(), z.number()]).transform(val => String(val)),
   title: z.string(),
   instruction: z.string(),
   questions: z.array(QuestionSchema)
@@ -27,7 +27,7 @@ const PaperSchema = z.object({
   subject: z.string(),
   className: z.string(),
   timeAllowed: z.string(),
-  maximumMarks: z.number(),
+  maximumMarks: z.union([z.string(), z.number()]).transform(val => Number(val)),
   sections: z.array(SectionSchema)
 })
 
