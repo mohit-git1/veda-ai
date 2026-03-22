@@ -120,15 +120,27 @@ export default function AssignmentOutputPage() {
                 <p className="text-[16px] text-white leading-[1.6] mb-[20px] font-medium tracking-tight">
                   Certainly, {name ? name.split(' ')[0] : 'Lakshya'}! Here are customized Question Paper for your CBSE {currentResult.className || 'Grade 8'} {currentResult.subject || 'Science'} classes on the NCERT chapters:
                 </p>
-                <button
-                  onClick={handleDownloadPDF}
-                  className="flex items-center justify-center gap-[8px] h-[44px] px-[24px] rounded-full text-[14px] font-bold text-[#111111] transition-all bg-white hover:bg-gray-100 active:scale-95 shadow-sm"
-                >
-                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5h.01M9 20.25H9.01M6.75 18.375H6.76M11.25 18.375H11.26" />
-                  </svg>
-                  Download as PDF
-                </button>
+                <div className="flex flex-wrap items-center gap-[12px]">
+                  <button
+                    onClick={handleDownloadPDF}
+                    className="flex items-center justify-center gap-[8px] h-[44px] px-[24px] rounded-full text-[14px] font-bold text-white transition-all bg-[#22C55E] hover:bg-[#16A34A] active:scale-95 shadow-sm"
+                  >
+                    <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5h.01M9 20.25H9.01M6.75 18.375H6.76M11.25 18.375H11.26" />
+                    </svg>
+                    Download as PDF
+                  </button>
+                  <button
+                    onClick={handleRegenerate}
+                    disabled={regenerating}
+                    className="flex items-center justify-center gap-[8px] h-[44px] px-[24px] rounded-full text-[14px] font-bold text-white transition-all bg-[#4B5563] hover:bg-[#374151] active:scale-95 disabled:opacity-50 shadow-sm"
+                  >
+                    <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    {regenerating ? 'Regenerating...' : 'Regenerate'}
+                  </button>
+                </div>
               </>
             ) : (
               <p className="text-[15px] pb-[20px] font-medium text-white">
