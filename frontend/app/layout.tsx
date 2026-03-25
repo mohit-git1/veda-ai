@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'VedaAI – AI Assessment Creator',
-  description: 'Create AI-powered assessments for your students',
+  title: 'VerdictAI – AI Hiring Assessment Platform',
+  description: 'Generate role-specific technical assessments for your hiring pipeline',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
