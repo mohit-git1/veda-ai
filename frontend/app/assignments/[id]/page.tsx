@@ -125,18 +125,25 @@ export default function AssessmentOutputPage() {
         <div className="bg-[#262626] rounded-[24px] border border-[#333333] p-[24px] mb-[32px] flex flex-col items-start gap-[20px]">
           <div className="flex-1 w-full">
             {isGenerating ? (
-              <div className="flex items-center gap-[12px]">
-                <div className="flex gap-1.5">
-                  {[0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className="w-[6px] h-[6px] bg-[#9CA3AF] rounded-full animate-bounce"
-                      style={{ animationDelay: `${i * 0.15}s` }}
-                    />
-                  ))}
+              <div className="w-full">
+                <div style={{
+                  width: '100%',
+                  background: '#1a1a1a',
+                  borderRadius: '4px',
+                  height: '8px',
+                  overflow: 'hidden',
+                  margin: '16px 0'
+                }}>
+                  <div style={{
+                    height: '100%',
+                    background: 'linear-gradient(90deg, #2563EB, #60a5fa)',
+                    borderRadius: '4px',
+                    animation: 'loadbar 1.8s ease-in-out infinite',
+                    width: '40%'
+                  }} />
                 </div>
-                <p className="text-[15px] font-medium text-white pb-[20px]">
-                  Generating your assessment...
+                <p style={{ color: '#9CA3AF', fontSize: '13px', textAlign: 'center' }}>
+                  Preparing your assessment...
                 </p>
               </div>
             ) : currentResult ? (

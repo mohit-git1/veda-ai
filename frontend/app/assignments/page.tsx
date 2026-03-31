@@ -189,12 +189,26 @@ export default function AssessmentsPage() {
           </div>
 
           {assignments.some(a => a.status === 'processing' || a.status === 'pending') && (
-            <div
-              className="flex items-center gap-3 px-4 py-3 rounded-xl mb-4 text-sm font-medium"
-              style={{ background: '#DBEAFE', color: '#1D4ED8' }}
-            >
-              <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse flex-shrink-0" />
-              AI is generating your assessment... This may take up to 60 seconds. You can wait here or come back later.
+            <div className="w-full mb-4">
+              <div style={{
+                width: '100%',
+                background: '#1a1a1a',
+                borderRadius: '4px',
+                height: '8px',
+                overflow: 'hidden',
+                margin: '16px 0'
+              }}>
+                <div style={{
+                  height: '100%',
+                  background: 'linear-gradient(90deg, #2563EB, #60a5fa)',
+                  borderRadius: '4px',
+                  animation: 'loadbar 1.8s ease-in-out infinite',
+                  width: '40%'
+                }} />
+              </div>
+              <p style={{ color: '#9CA3AF', fontSize: '13px', textAlign: 'center' }}>
+                Preparing your assessment...
+              </p>
             </div>
           )}
 
