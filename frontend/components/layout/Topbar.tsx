@@ -34,7 +34,7 @@ export default function Topbar({ showBack = false, title = 'Assignment', onMenuC
       style={{
         width: size,
         height: size,
-        background: avatar ? 'transparent' : 'linear-gradient(135deg, #E8431C, #FF6B35)',
+        background: avatar ? 'transparent' : 'linear-gradient(135deg, #2563EB, #3B82F6)',
       }}
     >
       {avatar ? (
@@ -52,7 +52,7 @@ export default function Topbar({ showBack = false, title = 'Assignment', onMenuC
       <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
         <p className="text-sm font-semibold text-gray-900">Notifications</p>
         {pendingAssignments.length > 0 && (
-          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: '#E8431C' }}>
+          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: '#2563EB' }}>
             {pendingAssignments.length}
           </span>
         )}
@@ -141,8 +141,8 @@ export default function Topbar({ showBack = false, title = 'Assignment', onMenuC
             onClick={() => router.push('/')} 
             className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <img src="/VedaAI.png" alt="VedaAI" width={32} height={32} style={{ borderRadius: '22%' }} />
-            <span className="font-bold text-[16px] text-gray-900">VedaAI</span>
+            <img src="/VedaAI.png" alt="VerdictAI" width={32} height={32} style={{ borderRadius: '22%' }} />
+            <span className="font-bold text-[16px] text-gray-900">VerdictAI</span>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -204,7 +204,7 @@ export default function Topbar({ showBack = false, title = 'Assignment', onMenuC
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
               </svg>
               {pendingAssignments.length > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ background: '#E8431C' }}></span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ background: '#2563EB' }}></span>
               )}
             </button>
             {notifOpen && <NotifDropdown />}

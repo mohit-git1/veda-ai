@@ -136,13 +136,13 @@ export default function AssignmentOutputPage() {
                   ))}
                 </div>
                 <p className="text-[15px] font-medium text-white pb-[20px]">
-                  Generating your question paper...
+                  Generating your assessment...
                 </p>
               </div>
             ) : currentResult ? (
               <>
                 <p className="text-[16px] text-white leading-[1.6] mb-[20px] font-medium tracking-tight">
-                  Certainly, {name ? name.split(' ')[0] : 'Lakshya'}! Here are customized Question Paper for your CBSE {currentResult.className || 'Grade 8'} {currentResult.subject || 'Science'} classes on the NCERT chapters:
+                  Here is the AI-generated technical assessment for the {currentResult.subject} role. Share this with your candidates:
                 </p>
                 <div className="flex flex-wrap items-center gap-[12px]">
                   <button
@@ -152,7 +152,7 @@ export default function AssignmentOutputPage() {
                     <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg>
-                    Download as PDF
+                    Download Assessment
                   </button>
                   <button
                     onClick={handleRegenerate}
@@ -186,8 +186,8 @@ export default function AssignmentOutputPage() {
             {/* School Header */}
             <div className="text-center mb-[16px] pb-[16px] border-b border-[#E5E7EB]">
               <h1 className="text-[15px] md:text-[17px] font-bold text-[#111111]">{currentResult.schoolName}</h1>
-              <p className="text-[14px] text-[#374151] mt-1">Subject: {currentResult.subject}</p>
-              <p className="text-[14px] text-[#374151]">Class: {currentResult.className}</p>
+              <p className="text-[14px] text-[#374151] mt-1">Role: {currentResult.subject}</p>
+              <p className="text-[14px] text-[#374151]">{currentResult.className}</p>
             </div>
 
             {/* Meta row */}
@@ -202,7 +202,7 @@ export default function AssignmentOutputPage() {
 
             {/* Student Info */}
             <div className="mb-[24px] space-y-[12px]">
-              {['Name', 'Roll Number', `Class: ${currentResult.className} Section`].map((label) => (
+              {['Candidate Name', 'Candidate Email', 'Date of Assessment'].map((label) => (
                 <div key={label} className="flex items-end gap-[8px] text-[13px] text-[#374151]">
                   <span className="flex-shrink-0 leading-none">{label}:</span>
                   <div className="flex-1 border-b border-[#9CA3AF]" />
@@ -247,7 +247,7 @@ export default function AssignmentOutputPage() {
 
             <div className="mt-[32px] pt-[16px] border-t border-[#E5E7EB]">
               <p className="text-center text-[13px] font-semibold text-[#111111]">
-                End of Question Paper
+                End of Assessment
               </p>
             </div>
 

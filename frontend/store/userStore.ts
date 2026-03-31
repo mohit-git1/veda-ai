@@ -19,9 +19,9 @@ export const useUserStore = create<UserStore>()(
   persist(
     (set) => ({
       name: 'John Doe',
-      email: 'admin@school.edu.in',
-      schoolName: 'Delhi Public School',
-      city: 'Bokaro Steel City',
+      email: 'hiring@acmecorp.com',
+      schoolName: 'Acme Corp',
+      city: 'Bangalore',
       avatar: null,
 
       setName: (name) => set({ name }),

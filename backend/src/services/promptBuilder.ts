@@ -18,29 +18,34 @@ export function buildPrompt(input: PromptInput): string {
   }).join('\n')
 
   const contextText = input.fileContent
-    ? `\n\nUse the following uploaded content as source material:\n${input.fileContent.substring(0, 3000)}`
+    ? `\n\nUse the following Job Description context as source material:\n${input.fileContent.substring(0, 3000)}`
     : ''
 
-  return `You are an expert teacher creating a formal exam question paper.
+  return `You are an expert technical hiring manager creating a formal candidate assessment paper.
 
-Subject: ${input.subject || 'General Science'}
+Skills/Role: ${input.subject || 'General Engineering'}
 Total Questions: ${totalQuestions}
 Total Marks: ${totalMarks}
-Additional Instructions: ${input.additionalInstructions || 'None'}
+Candidate Details (Job Title, Company, Experience, Skills):
+${input.additionalInstructions || 'None'}
 ${contextText}
 
-Create a question paper with these sections:
+Create a role-specific technical assessment with these sections:
 ${sectionDetails}
 
-Difficulty distribution per section: 30% easy, 50% medium, 20% hard.
+Rules:
+- MCQ must have exactly 4 options labeled (A/B/C/D). Include the options in the question text.
+- Coding problems must include problem description, constraints, and sample input/output specs.
+- Always include detailed answer keys with explanations.
+- Difficulty distribution per section: 30% easy, 50% medium, 20% hard.
 
 Return ONLY valid JSON. No markdown, no explanation, no code blocks. Just raw JSON:
 
 {
-  "paperTitle": "Question Paper",
-  "subject": "${input.subject || 'General Science'}",
-  "className": "Class 10",
-  "timeAllowed": "3 Hours",
+  "paperTitle": "Candidate Assessment",
+  "subject": "${input.subject || 'General Engineering'}",
+  "className": "Candidate Assessment",
+  "timeAllowed": "90 Minutes",
   "maximumMarks": ${totalMarks},
   "sections": [
     {
@@ -50,11 +55,11 @@ Return ONLY valid JSON. No markdown, no explanation, no code blocks. Just raw JS
       "questions": [
         {
           "id": 1,
-          "text": "Question text here?",
-          "type": "short",
+          "text": "Question text here? A) op1 B) op2 C) op3 D) op4",
+          "type": "mcq",
           "difficulty": "easy",
           "marks": 2,
-          "answer": "Detailed answer here"
+          "answer": "B) op2 - Detailed explanation here"
         }
       ]
     }

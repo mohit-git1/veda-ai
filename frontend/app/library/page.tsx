@@ -4,13 +4,13 @@ import { useRouter } from 'next/navigation'
 import AppShell from '@/components/layout/AppShell'
 import { useAssignmentStore } from '@/store/assignmentStore'
 
-const TABS = ['All', 'Question Papers', 'Templates', 'Saved']
+const TABS = ['All', 'Assessments', 'Templates', 'Saved']
 
 const TEMPLATES = [
-  { id: 't1', title: 'CBSE Class 10 Science Template', questions: 30, marks: 80 },
-  { id: 't2', title: 'MCQ Only Template', questions: 50, marks: 50 },
-  { id: 't3', title: 'Descriptive English Template', questions: 10, marks: 60 },
-  { id: 't4', title: 'Mixed Format Template', questions: 25, marks: 70 },
+  { id: 't1', title: 'Full Stack Engineer Assessment', questions: 30, marks: 80 },
+  { id: 't2', title: 'Frontend Developer Assessment', questions: 25, marks: 60 },
+  { id: 't3', title: 'Backend Engineer Assessment', questions: 28, marks: 75 },
+  { id: 't4', title: 'Data Scientist Assessment', questions: 20, marks: 70 },
 ]
 
 export default function LibraryPage() {
@@ -34,14 +34,14 @@ export default function LibraryPage() {
       )
     }
 
-    const showPapers = activeTab === 'All' || activeTab === 'Question Papers'
+    const showPapers = activeTab === 'All' || activeTab === 'Assessments'
     const showTemplates = activeTab === 'All' || activeTab === 'Templates'
 
     return (
       <div className="space-y-12">
         {showPapers && (
           <div>
-            {(activeTab === 'All') && <h2 className="text-[16px] font-bold text-gray-900 mb-4">Question Papers</h2>}
+            {(activeTab === 'All') && <h2 className="text-[16px] font-bold text-gray-900 mb-4">Assessments</h2>}
             {completedPapers.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {completedPapers.map(p => (
@@ -106,16 +106,16 @@ export default function LibraryPage() {
   }
 
   return (
-    <AppShell title="My Library">
+    <AppShell title="Assessment Library">
       <div className="max-w-[1000px] mx-auto px-4 py-8">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <h1 className="text-[18px] font-semibold text-gray-900">My Library</h1>
+              <h1 className="text-[18px] font-semibold text-gray-900">Assessment Library</h1>
             </div>
-            <p className="text-[14px] text-gray-500">Your saved papers, templates and resources</p>
+            <p className="text-[14px] text-gray-500">Your saved assessments, templates and resources</p>
           </div>
           <div className="relative w-full md:w-auto">
             <input type="text" placeholder="Search templates..." className="w-full md:w-64 pl-10 pr-4 py-2.5 border border-gray-200 rounded-full text-sm bg-white focus:outline-none focus:border-gray-400 transition-colors" />
